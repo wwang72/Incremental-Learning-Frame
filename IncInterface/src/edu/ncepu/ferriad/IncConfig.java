@@ -1,5 +1,5 @@
 package edu.ncepu.ferriad;
-public class Inc_Config {
+public class IncConfig {
 	
 	public int getLTS() {
 		return LTS;
@@ -25,14 +25,14 @@ public class Inc_Config {
 	public void setLA(String lA) {
 		LA = lA;
 	}
-	public Inc_Config(int lTS, int dV, int fR, String lA) {
+	public IncConfig(int lTS, int dV, int fR, String lA) {
 		super();
 		LTS = lTS;
 		DV = dV;
 		FR = fR;
 		LA = lA;
 	}
-	public Inc_Config() {
+	public IncConfig() {
 		super();
 	}
 	
