@@ -1,5 +1,9 @@
 package edu.ncepu.cs.wwk.incframe;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import edu.ncepu.cs.wwk.bpnetwork.BPData;
 import edu.ncepu.ferriad.*;
 /**
  * <p><b>Incremental Learning Frame</b></p>
@@ -26,7 +30,7 @@ public class IncFrame implements IncMain{
 	}
 	
 	/**
-	 *<P><b>public void incMainStart()</b></p><p>Start the incremental learning method in multt-thread mod</p> 
+	 *<P><b>public void incMainStart()</b></p><p>Start the incremental learning method in multi-thread mod</p> 
 	 */
 	@Override
 	public void incMainStart() {
@@ -68,6 +72,7 @@ public class IncFrame implements IncMain{
 				// TODO Auto-generated method stub
 				performAnalysis();
 				setDataNext();
+				System.out.println("Start at: "+new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()));
 			try {
 				Thread.sleep(icf.getLTS());
 			} catch (InterruptedException e) {
@@ -87,10 +92,7 @@ public class IncFrame implements IncMain{
 		// TODO Auto-generated method stub
 		
 	}
-	
+	private BPData bpd;
 	private IncConfig icf;
 	
-	
-	
-
 }
