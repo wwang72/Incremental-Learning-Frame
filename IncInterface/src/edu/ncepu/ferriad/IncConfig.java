@@ -13,7 +13,7 @@ public class IncConfig {
 	public void setDV(int dV) {
 		DV = dV;
 	}
-	public int getFR() {
+	public double getFR() {
 		return FR;
 	}
 	public void setFR(int fR) {
@@ -25,11 +25,18 @@ public class IncConfig {
 	public void setLA(String lA) {
 		LA = lA;
 	}
-	public IncConfig(int lTS, int dV, int fR, String lA) {
+	public int getBDV() {
+		return BDV;
+	}
+	public void setBDV(int bDV) {
+		BDV = bDV;
+	}
+	public IncConfig(int lTS, int dV, int bDV, double d, String lA) {
 		super();
 		LTS = lTS;
 		DV = dV;
-		FR = fR;
+		BDV = bDV;
+		FR = d;
 		LA = lA;
 	}
 	public IncConfig() {
@@ -38,7 +45,10 @@ public class IncConfig {
 	
 	protected int LTS;// learning timespan
 	protected int DV;// learning data volume
-	protected int FR;// learning fault rate
+	protected int BDV;
+	
+
+	protected double FR;// learning fault rate
 	protected String LA;// learning algorithm
 	
 }

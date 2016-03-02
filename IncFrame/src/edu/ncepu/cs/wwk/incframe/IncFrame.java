@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.ncepu.cs.wwk.bpnetwork.BPData;
+import edu.ncepu.cs.wwk.bpnetwork.BPMain;
+import edu.ncepu.cs.wwk.bpnetwork.BPNetwork;
 import edu.ncepu.ferriad.*;
 /**
  * <p><b>Incremental Learning Frame</b></p>
@@ -14,21 +16,24 @@ import edu.ncepu.ferriad.*;
  * @version 1.0
  */
 public class IncFrame implements IncMain{
+	
 	/**
 	 *<P><b>public IncFrame()</b></p><p>Default Construct Function. Instantiate an IncConfig object as the default configuration</p> 
   	 */
 	public IncFrame(){
 		super();
-		this.icf = new IncConfig();
-	}
-	/**
-	 *<P><b>public IncFrame(IncConfig incconfig)</b></p><p>Construct Function with an object of IncConfig</p> 
-	 */
-	public IncFrame(IncConfig incconfig){
-		super(); 
-		this.icf = incconfig;
 	}
 	
+	/**
+	 *<P><b>public void initContext()</b></p><p>Initiate the incremental learning context with the default icf</p> 
+	 */
+	@Override
+	public void initContext() {
+		// TODO Auto-generated method stub
+		icf = new IncConfig(1, 2, 25, 0.01, "BPNetwork");
+		bpd = new BPData();
+		bpm = new BPMain();
+	}
 	/**
 	 *<P><b>public void incMainStart()</b></p><p>Start the incremental learning method in multi-thread mod</p> 
 	 */
@@ -39,24 +44,23 @@ public class IncFrame implements IncMain{
 		incThread.start();
 		
 	}
-	
 	/**
-	 *<P><b>public void setIncConf(IncConfig incconfig)</b></p><p>Set the configuration of the incremental method dynamically</p> 
+	 *<P><b>public void baseMainStart()</b></p><p>Start the incremental learning basic part</p> 
 	 */
 	@Override
-	public void setIncConf(IncConfig incconfig) {
+	public void baseMainStart() {
 		// TODO Auto-generated method stub
-		this.icf = incconfig;
+		bpm.startNetwork(bpd, icf.getBDV());
 	}
-	
+		
 	/**
-	 *<P><b>public void setIncConf(IncConfig incconfig)</b></p><p>Set the configuration of the incremental method dynamically</p> 
+	 *<P><b>public long performAnalysis()</b></p><p>Perform IncLearning</p> 
 	 */
 	@Override
-	public int performAnalysis() {
-		
+	public long performAnalysis() {
+		long lastPos = bpm.incLearning(bpd, pos, icf.getDV());
 		// TODO Auto-generated method stub
-		return 0;
+		return lastPos;
 	}
 	
 	/**
@@ -70,8 +74,8 @@ public class IncFrame implements IncMain{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				performAnalysis();
-				setDataNext();
+				pos = performAnalysis();
+				getIncData(pos);
 				System.out.println("Start at: "+new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()));
 			try {
 				Thread.sleep(icf.getLTS());
@@ -88,11 +92,26 @@ public class IncFrame implements IncMain{
 	 *<P><b>public void setDataNext()</b></p><p>Move the data cursor to the next when the last epoch of training ends</p> 
 	 */
 	@Override
-	public void setDataNext() {
+	public void getIncData(long pos) {
 		// TODO Auto-generated method stub
-		
+		bpd.clearIncPData();
+		bpd.clearIncTData();
+		bpd.readIncData("./data/data_filtered", 0, pos, icf.getDV());	
+	}
+	
+
+	/**
+	 *<P><b>public void setIncConf(IncConfig incconfig)</b></p><p>Set the configuration of the incremental method dynamically</p> 
+	 */
+	@Override
+	public void setIncConf(IncConfig incconfig) {
+		// TODO Auto-generated method stub
+		this.icf = incconfig;
 	}
 	private BPData bpd;
+	private BPMain bpm;
 	private IncConfig icf;
+	private long pos;
+	
 	
 }
