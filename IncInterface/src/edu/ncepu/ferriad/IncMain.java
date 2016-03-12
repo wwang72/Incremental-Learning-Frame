@@ -13,9 +13,9 @@ public interface IncMain {
 	
 	public abstract Runnable timeHandler();//control the machine learning algorithm for each dataLine
 	
-	public abstract long performAnalysis();//perform analysis for each dataLine
+	public abstract void performAnalysis();//perform analysis for each dataLine
 	
-	public abstract void getIncData(long pos);//getIncData
+	public abstract long getIncData(long pos);//getIncData
 	
 	
 }
