@@ -1,15 +1,14 @@
 package edu.ncepu.cs.wwk.incframe;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.ncepu.cs.wwk.bpnetwork.BPData;
 import edu.ncepu.cs.wwk.bpnetwork.BPMain;
-import edu.ncepu.cs.wwk.bpnetwork.BPNetwork;
 import edu.ncepu.ferriad.*;
 /**
  * <p><b>Incremental Learning Frame</b></p>
@@ -20,7 +19,9 @@ import edu.ncepu.ferriad.*;
  * @version 1.0
  */
 public class IncFrame implements IncMain{
-	
+	private long fileLength;
+	private String data_url;
+	private int count;
 	/**
 	 *<P><b>public IncFrame()</b></p><p>Default Construct Function. Instantiate an IncConfig object as the default configuration</p> 
   	 */
@@ -38,10 +39,13 @@ public class IncFrame implements IncMain{
 		icf = new IncConfig(1, 1, 25, 0.1, "BPNetwork");
 		bpd = new BPData();
 		bpm = new BPMain();
+		data_url = "./data/testFile";
 		pos = 0;
 		current_t = null;
 		stop = true;
 		result_url = "./current_t";
+		fileLength = (new File(data_url)).length();
+		count = 0;
 	}
 	/**
 	 *<P><b>public void incMainStart()</b></p><p>Start the incremental learning method in multi-thread mod</p> 
@@ -59,7 +63,7 @@ public class IncFrame implements IncMain{
 	@Override
 	public void baseMainStart() {
 		// TODO Auto-generated method stub
-		bpm.startNetwork(bpd, icf.getBDV());
+		bpm.startNetwork(bpd, icf.getBDV(),data_url);
 		stop = false;
 	}
 		
@@ -111,9 +115,14 @@ public class IncFrame implements IncMain{
 				while(!stop){
 				// TODO Auto-generated method stub
 				pos = getIncData(pos);
+				System.out.println(pos);
+				if(pos >= fileLength){
+					stop = true;
+					continue;
+				};
 				performAnalysis();
 				storeResult();
-				
+				count++;
 				System.out.println("Start at: "+new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()));
 				try {
 					Thread.sleep(icf.getLTS());
@@ -139,8 +148,8 @@ public class IncFrame implements IncMain{
 				dataLine += current_t[i][0]+"\r\n";
 			}
 			fw.write(dataLine);
-			fw.close();
 			fw.flush();	
+			fw.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,7 +167,7 @@ public class IncFrame implements IncMain{
 		// TODO Auto-generated method stub
 		bpd.clearIncPData();
 		bpd.clearIncTData();
-		long current_pos = bpd.readIncData("./data/data_filtered", 0, pos, icf.getDV());
+		long current_pos = bpd.readIncData(data_url, 0, pos, icf.getDV());
 		return current_pos;
 	}
 	
