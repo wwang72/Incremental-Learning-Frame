@@ -3,7 +3,7 @@ package edu.ncepu.ferriad;
 
 public interface IncMain {
 	
-	public abstract void initContext();
+	public abstract void initContext(String filename);
 	
 	public abstract void baseMainStart();// the basis of the incremental learning
 	

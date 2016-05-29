@@ -85,7 +85,7 @@ public class BPNetwork extends Object {
         in_rate = pmax;
         out_rate = tmax;
 
-        for (int isamp = 0; isamp < samplenum; isamp++) { //循环训练一次样本
+        for (int isamp = 0; isamp < samplenum; isamp++) { //归一化
             for (int i = 0; i < inNum; i++) {
                 input[i] = p[isamp][i] / in_rate;
             }

@@ -25,25 +25,25 @@ public class IncFrame implements IncMain{
 	/**
 	 *<P><b>public IncFrame()</b></p><p>Default Construct Function. Instantiate an IncConfig object as the default configuration</p> 
   	 */
-	public IncFrame(){
+	public IncFrame(String filename){
 		super();
-		initContext();
+		initContext(filename);
 	}
 	
 	/**
 	 *<P><b>public void initContext()</b></p><p>Initiate the incremental learning context with the default icf</p> 
 	 */
 	@Override
-	public void initContext() {
+	public void initContext(String filename) {
 		// TODO Auto-generated method stub
 		icf = new IncConfig(1, 1, 25, 0.1, "BPNetwork");
 		bpd = new BPData();
 		bpm = new BPMain();
-		data_url = "./data/testFile";
+		data_url = "./data/"+filename;
 		pos = 0;
 		current_t = null;
 		stop = true;
-		result_url = "./current_t";
+		result_url = "./current_t"+filename;
 		fileLength = (new File(data_url)).length();
 		count = 0;
 	}
@@ -75,6 +75,7 @@ public class IncFrame implements IncMain{
 		double[][] temp_result = bpm.simModel(bpd,stop);
 		if(errorExceed(temp_result)){
 		bpm.modelLearning(bpd);
+		getIncData(pos);
 		temp_result = bpm.simModel(bpd, stop);
 		}
 		if(!stop)
@@ -143,7 +144,7 @@ public class IncFrame implements IncMain{
 			String dataLine = "";
 			for(int i = 0;i<current_t.length;i++){				
 				for(int j = 0;j<current_p[0].length;j++){
-					dataLine+=current_p[i][j]+" ";
+					dataLine+=current_p[i][j]+",";
 				}
 				dataLine += current_t[i][0]+"\r\n";
 			}

@@ -22,7 +22,7 @@ public class BPMain {
 			double t [][] = bpd.getTData();
 			System.out.println("Data read!");
 			System.out.println("Start training...");
-			bpc = new BPConfig(p[0].length, 6, t[0].length,500);
+			bpc = new BPConfig(p[0].length, 6, t[0].length,50);
 			bpn = new BPNetwork(bpc);
 			bpn.train(p, t, basesample);
 		}else{
